@@ -17,13 +17,29 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      * 
-     * Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified.
+     * Error: Illuminate\Encryption\MissingAppKeyException: No application encryption key has been specified.
+     * Was solved using config:cache artisan command
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testHomeResponseStatus()
     {
         $response = $this->get('/');
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Simple test to authentication
+     * 
+     * @return void
+     */
+    public function testAuthentication()
+    {
+        $user = User::factory()
+            ->create();
+
+        $response = $this->actingAs($user)
+            ->get('/home');
 
         $response->assertStatus(200);
     }
